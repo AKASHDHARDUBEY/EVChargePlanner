@@ -1,0 +1,21 @@
+# EV Charging Infrastructure Planning Guidelines
+
+## 1. General Principles
+- Prioritize equitable access by installing charging stations in disadvantaged communities, adhering to the federal Justice40 Initiative.
+- Adopt "EV-ready" building codes and streamline permitting processes to reduce installation costs and installation complexity.
+- Engage local electric utilities early in the planning process. This prevents unexpected capacity limits and allows for managed upgrade costs.
+
+## 2. Station Placement Strategy
+- **Corridor-Level**: Focus on highways and interregional travel routes. Fast chargers (DCFC) should be placed every 50 miles along major corridors.
+- **Community-Level**: Focus on regional transit centers, public parking lots, and multi-unit dwellings. Destination charging (Level 2) is highly effective where vehicles remain parked for >2 hours.
+- **Site-Level**: Ensure installations meet ADA (Americans with Disabilities Act) accessibility standards. Consider the physical footprint, lighting, and clear EV-only signage.
+
+## 3. Load Management & Schedulling
+- Implement Time-of-Use (TOU) pricing algorithms in planning assumptions to encourage off-peak overnight charging.
+- Use staggered charging schedules for fleets (like delivery trucks or school buses) to avoid exceeding transformer capacities.
+- Integrate smart chargers that can dynamically adjust output power based on the building or grid’s overall load curve.
+
+## 4. Grid Integration Strategies
+- Pair EV charging stations with local solar photovoltaic (PV) generation and battery energy storage systems (BESS) where the grid is constrained.
+- Utilize load balancing features provided by Networked charging software to prevent drawing more power than the site can support.
+- Assess historical utility demand data. Sites with significant spare electrical capacity generally make the best rapid-deployment targets.

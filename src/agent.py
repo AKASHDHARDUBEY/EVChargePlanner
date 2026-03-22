@@ -63,8 +63,11 @@ peak days: {d_str}
     state["demand_summary"] = ask_llm(p)
     return state
 
+from src.rag import retrieve_best_guidelines
+
 def retrieve_guidelines(state):
-    state["guidelines"] = ask_llm("give me 5-6 brief guidelines for ev charging station placement, capacity, grid integration and load management. cite sources if possible.")
+    q = "ev charging station placement grid integration load management"
+    state["guidelines"] = retrieve_best_guidelines(q)
     return state
 
 def generate_plan(state):
