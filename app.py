@@ -196,6 +196,58 @@ def run_analysis(df):
     else:
         st.info("👆 Train the models first to generate forecasts.")
 
+    # 6. Agentic Planner
+    st.header("🧠 6. AI Agent Infrastructure Planner")
+    st.markdown("Use the LangGraph AI Assistant to generate infrastructure placement and scheduling recommendations.")
+
+    if st.button("✨ Generate AI Planning Report"):
+        if 'df_processed' not in st.session_state:
+            st.warning("Please train the models first so the agent has data to analyze.")
+        else:
+            with st.spinner("Agent is analyzing data & retrieving guidelines..."):
+                from src.agent import run_agent
+                from src.preprocessing import get_summary_stats, get_peak_hours, get_peak_days
+                
+                df_processed = st.session_state['df_processed']
+                stats = get_summary_stats(df_processed)
+                peak_hours = get_peak_hours(df_processed)
+                peak_days = get_peak_days(df_processed)
+                
+                report = run_agent({}, peak_hours, peak_days, stats)
+                st.session_state['agent_report'] = report
+                st.success("Report generated successfully!")
+                
+    if 'agent_report' in st.session_state:
+        report = st.session_state['agent_report']
+        
+        if report.get("data_warnings"):
+            st.warning(f"Data Warning: {report['data_warnings']}")
+            
+        st.subheader("📝 AI Demand Summary")
+        st.write(report.get("demand_summary", ""))
+        
+        st.subheader("🏭 Infrastructure Recommendations")
+        st.write(report.get("infrastructure_recommendations", ""))
+        
+        st.subheader("⏱️ Scheduling Insights")
+        st.write(report.get("scheduling_insights", ""))
+        
+        with st.expander("📚 References & Review Status"):
+            st.write("**References:**", report.get("references", ""))
+            st.write("**AI Review Feedback:**", report.get("review_status", ""))
+        
+        # PDF EXPORT
+        from src.report import generate_pdf_report
+        try:
+            pdf_bytes = generate_pdf_report(report)
+            st.download_button(
+                label="📄 Download Full Report as PDF",
+                data=pdf_bytes,
+                file_name="ev_planning_report.pdf",
+                mime="application/pdf"
+            )
+        except Exception as e:
+            st.error(f"Could not generate PDF: {str(e)}")
 
 # route to the right data source
 if data_source == "Sample Data":
