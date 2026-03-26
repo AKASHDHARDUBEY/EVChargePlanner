@@ -206,7 +206,6 @@ def run_analysis(df):
         else:
             with st.spinner("Agent is analyzing data & retrieving guidelines..."):
                 from src.agent import run_agent
-                from src.preprocessing import get_summary_stats, get_peak_hours, get_peak_days
                 
                 df_processed = st.session_state['df_processed']
                 stats = get_summary_stats(df_processed)
