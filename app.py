@@ -267,30 +267,77 @@ def run_analysis(df):
         )
 
 # route to the right data source
+def process_data_frame(df):
+    if 'time' not in df.columns:
+        # Try to find a date/time column automatically
+        time_col = None
+        for col in df.columns:
+            try:
+                # Test first 5 rows to see if it parses as datetime
+                pd.to_datetime(df[col].dropna().astype(str).head())
+                time_col = col
+                break
+            except Exception:
+                continue
+                
+        if time_col:
+            st.success(f"Auto-detected time column: '{time_col}'")
+            df = df.rename(columns={time_col: 'time'})
+        else:
+            st.error("Could not detect any time/date column in the CSV. Please provide valid timestamps.")
+            return
+            
+    # Make sure 'time' is the first column
+    cols = ['time'] + [c for c in df.columns if c != 'time']
+    df = df[cols]
+    
+    df['time'] = pd.to_datetime(df['time'])
+    run_analysis(df)
+    
+    # 7. Q&A Chat Interface
+    st.markdown("---")
+    st.header("💬 7. Ask the AI About Your Data")
+    st.markdown("Ask specific questions about the insights, peaks, or infrastructure recommendations.")
+    
+    user_q = st.text_input("Drop your question here:")
+    if st.button("Ask AI"):
+        from src.llm import ask_llm
+        from src.preprocessing import get_summary_stats, get_peak_hours
+        
+        ctx = "No report generated yet."
+        if 'agent_report' in st.session_state:
+            ctx = str(st.session_state['agent_report'])
+        else:
+            stats = get_summary_stats(df)
+            peaks = get_peak_hours(df)
+            ctx = f"Basic Stats: {stats}\nPeak Hours: {peaks}"
+            
+        prompt = f"You are an EV planner. Context from data: {ctx}\n\nUser asks: {user_q}\nAnswer specifically and concisely."
+        with st.spinner("AI is thinking..."):
+            ans = ask_llm(prompt)
+            st.info(ans)
+
+
 if data_source == "Sample Data":
     df = load_sample_data()
     if df is not None:
-        run_analysis(df)
+        process_data_frame(df)
 elif data_source == "Local File Path":
     st.sidebar.markdown("**Tip:** Enter the path to your CSV file below.")
     local_path = st.sidebar.text_input("File Path", value="data/volume.csv")
     if st.sidebar.button("Load File"):
         df = load_local_file(local_path)
         if df is not None:
-            run_analysis(df)
+            process_data_frame(df)
 else:
     uploaded_file = st.sidebar.file_uploader("Upload CSV", type=['csv'])
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
-        if 'time' in df.columns:
-            df['time'] = pd.to_datetime(df['time'])
-            run_analysis(df)
-        else:
-            st.error("CSV must contain a 'time' column.")
+        process_data_frame(df)
     else:
         st.info("📂 Upload a CSV file with EV charging data.")
         st.markdown("""
         **Expected CSV Format:**
-        - First column: `time` (timestamp like YYYY-MM-DD HH:MM)
-        - Other columns: zone IDs with charging volume data
+        - Even if you don't name it exactly `time`, the AI will auto-detect your timestamp column.
+        - Other columns should be zone IDs / station volumes.
         """)
