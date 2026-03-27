@@ -308,8 +308,10 @@ def process_data_frame(df):
         if 'agent_report' in st.session_state:
             ctx = str(st.session_state['agent_report'])
         else:
-            stats = get_summary_stats(df)
-            peaks = get_peak_hours(df)
+            from src.preprocessing import prepare_features
+            df_proc = prepare_features(df)
+            stats = get_summary_stats(df_proc)
+            peaks = get_peak_hours(df_proc)
             ctx = f"Basic Stats: {stats}\nPeak Hours: {peaks}"
             
         prompt = f"You are an EV planner. Context from data: {ctx}\n\nUser asks: {user_q}\nAnswer specifically and concisely."
