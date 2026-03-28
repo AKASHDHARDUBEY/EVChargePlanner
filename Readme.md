@@ -129,53 +129,73 @@ These metrics are used to evaluate demand prediction accuracy.
 
 ---
 
-## How to Run
+## 📂 Repository Structure
 
-1. Install dependencies:
+```text
+EVChargePlanner/
+│
+├── data/
+│   └── volume.csv                 # Historical EV charging datasets
+│
+├── knowledge/
+│   └── ev_guidelines.txt          # RAG Knowledge Base (PDF/Text context)
+│
+├── src/
+│   ├── preprocessing.py           # Data cleaning and feature engineering
+│   ├── model.py                   # Random Forest & Linear Regression models
+│   ├── visualization.py           # Charts and interactive plots
+│   ├── rag.py                     # ChromaDB Vector Store for document retrieval 
+│   ├── agent.py                   # LangGraph AI Workflow (Analyzer, Planner, Reviewer)
+│   ├── llm.py                     # Groq LLM integration
+│   └── report.py                  # Generates the final PDF exports
+│
+├── app.py                         # Main Streamlit interface
+├── requirements.txt               # Dependencies
+└── README.md                      # Documentation
+```
+
+---
+
+## 🚀 How to Run
+
+1. Clone the repository and install dependencies:
 ```bash
-
 pip install -r requirements.txt
 ```
 
-2. Place the `volume.csv` file in the `data/` folder
+2. Place your `volume.csv` file in the `data/` folder.
 
-3. Run the application:
+3. Run the Streamlit application:
 ```bash
 streamlit run app.py
 ```
 
-4. Open http://localhost:8501 in your browser
+4. Open http://localhost:8501 in your browser.
+
+5. **For Milestone 2 (AI Agent):** Enter your free **Groq API Key** in the sidebar configuration to unlock the LangGraph Agentic Planner and Interactive QA Chatbot.
 
 ---
 
-## Team
+## 👥 Team Roles
 
 This project is developed by a team of **4 students**, with clear ownership across:
-
-* Data preprocessing
-* ML & forecasting
-* UI & visualization
-* Agentic AI & planning
+* **Member 1 (Agent Architect):** LangGraph workflow logic and state management.
+* **Member 2 (Knowledge Engineer):** RAG vector database and Prompt Engineering.
+* **Member 3 (Integration Lead):** ML outputs to LLM pipeline and error handling.
+* **Member 4 (UI & DevOps):** Streamlit frontend, PDF extensions, and cloud deployment.
 
 ---
 
-## Deployment
+## ☁️ Deployment
 
 **Important:** Localhost-only demos are not accepted.
-
-The final application will be:
-
-* Publicly accessible
-* Hosted on a free-tier cloud platform
-
-Deployment link will be added here once live.
+The final application will be publicly hosted on **Streamlit Community Cloud**.
+*(Deployment link will be provided during submission)*
 
 ---
 
-## Demo & Submission
+## 🎥 Demo & Submission
 
-* 🎥 Demo video (5–7 minutes)
+* 🎥 Demo video (5–7 minutes) demonstrating both the Models and the AI Agent.
 * Public application URL
 * Complete GitHub repository
-
----
