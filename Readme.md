@@ -179,10 +179,10 @@ streamlit run app.py
 ## 👥 Team Roles
 
 This project is developed by a team of **4 students**, with clear ownership across:
-* **Member 1 (Agent Architect):** LangGraph workflow logic and state management.
-* **Member 2 (Knowledge Engineer):** RAG vector database and Prompt Engineering.
-* **Member 3 (Integration Lead):** ML outputs to LLM pipeline and error handling.
-* **Member 4 (UI & DevOps):** Streamlit frontend, PDF extensions, and cloud deployment.
+* **Amanjeet (Agent Architect):** LangGraph workflow logic and state management.
+* **Shubhi Kumari (Knowledge Engineer):** RAG vector database and Prompt Engineering.
+* **Ayush Kumar Pandey (Integration Lead):** ML outputs to LLM pipeline and error handling.
+* **Akash Dhar Dubey (UI & DevOps):** Streamlit frontend, PDF extensions, and cloud deployment.
 
 ---
 
