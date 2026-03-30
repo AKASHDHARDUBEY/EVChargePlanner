@@ -189,13 +189,13 @@ This project is developed by a team of **4 students**, with clear ownership acro
 ## ☁️ Deployment
 
 **Important:** Localhost-only demos are not accepted.
-The final application will be publicly hosted on **Streamlit Community Cloud**.
-*(Deployment link will be provided during submission)*
+The final application is successfully deployed and publicly accessible via Streamlit Community Cloud:
+🔗 **[Live Application: EV Charge Planner](https://ev-planner.streamlit.app/)**
 
 ---
 
 ## 🎥 Demo & Submission
 
 * 🎥 Demo video (5–7 minutes) demonstrating both the Models and the AI Agent.
-* Public application URL
+* **Public application URL:** [https://ev-planner.streamlit.app/](https://ev-planner.streamlit.app/)
 * Complete GitHub repository
