@@ -11,3 +11,4 @@ python-dotenv
 chromadb
 sentence-transformers
 fpdf2
+langchain-community
