@@ -218,9 +218,14 @@ def run_analysis(df):
             if 'model' in st.session_state and 'df_processed' in st.session_state:
                 predictions['status'] = 'Forecast available'
             
-            from src.agent import run_agent
-            report = run_agent(predictions, peak_hours, peak_days, stats)
-            st.session_state['agent_report'] = report
+            try:
+                from src.agent import run_agent
+                report = run_agent(predictions, peak_hours, peak_days, stats)
+                st.session_state['agent_report'] = report
+                st.success("✅ Report Generated!")
+            except Exception as e:
+                st.error("❌ API Error: Please make sure your Groq API Key is correct and that you haven't exceeded the free rate limit.")
+                st.error(f"Technical details: {str(e)}")
             
     if 'agent_report' in st.session_state:
         report = st.session_state['agent_report']
@@ -316,8 +321,12 @@ def process_data_frame(df):
             
         prompt = f"You are an EV planner. Context from data: {ctx}\n\nUser asks: {user_q}\nAnswer specifically and concisely."
         with st.spinner("AI is thinking..."):
-            ans = ask_llm(prompt)
-            st.info(ans)
+            try:
+                ans = ask_llm(prompt)
+                st.info(ans)
+            except Exception as e:
+                st.error("❌ API Error: Please make sure your Groq API Key is correct. (If it is, you may have reached the free rate limit, try again in a minute).")
+                st.error(f"Technical details: {str(e)}")
 
 
 if data_source == "Sample Data":
