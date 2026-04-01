@@ -13,3 +13,5 @@ sentence-transformers
 fpdf2
 langchain-community
 langchain-chroma
+protobuf>=3.20,<4
+langchain-text-splitters
