@@ -12,3 +12,4 @@ chromadb
 sentence-transformers
 fpdf2
 langchain-community
+langchain-chroma
