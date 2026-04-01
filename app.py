@@ -1,9 +1,11 @@
+import os
+os.environ["PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"] = "python"
+
 import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import timedelta
 import sys
-import os
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from src.preprocessing import (
