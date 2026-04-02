@@ -176,13 +176,16 @@ streamlit run app.py
 
 ---
 
-## 👥 Team Roles
+## 👥 Team AAS
 
-This project is developed by a team of **4 students**, with clear ownership across:
-* **Amanjeet (Agent Architect):** LangGraph workflow logic and state management.
-* **Shubhi Kumari (Knowledge Engineer):** RAG vector database and Prompt Engineering.
-* **Ayush Kumar Pandey (Integration Lead):** ML outputs to LLM pipeline and error handling.
-* **Akash Dhar Dubey (UI & DevOps):** Streamlit frontend, PDF extensions, and cloud deployment.
+| Member | URN | Role |
+|--------|-----|------|
+| Amanjeet | 2024-B-31102004 | Agent Architect — LangGraph workflow and state management |
+| Shubhi Kumari | 2024-B-21012006B | Knowledge Engineer — RAG vector database and Prompt Engineering |
+| Ayush Kumar Pandey | 2024-B-29112006 | Integration Lead — ML-to-LLM pipeline and error handling |
+| Akash Dhar Dubey | 2024-B-21122004B | UI & DevOps — Streamlit frontend, PDF extensions, cloud deployment |
+
+*Ajeenkya DY Patil University (ADYPU)*
 
 ---
 
