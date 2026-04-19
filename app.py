@@ -26,6 +26,13 @@ st.title("⚡ EV Charging Demand Prediction System")
 st.markdown("Predict EV charging demand using historical data. Compare **Linear Regression** vs **Random Forest**.")
 
 st.sidebar.header("⚙️ Configuration")
+
+# Setup Groq API Key
+groq_api_key = os.getenv("GROQ_API_KEY", "")
+api_key_input = st.sidebar.text_input("Groq API Key", value=groq_api_key, type="password", help="Required for Milestone 2: Agentic Planning")
+if api_key_input:
+    os.environ["GROQ_API_KEY"] = api_key_input
+
 data_source = st.sidebar.radio("Select Data Source", ["Sample Data", "Local File Path", "Upload Data"])
 
 
@@ -196,57 +203,68 @@ def run_analysis(df):
     else:
         st.info("👆 Train the models first to generate forecasts.")
 
-    # 6. Agentic Planner
-    st.header("🧠 6. AI Agent Infrastructure Planner")
-    st.markdown("Use the LangGraph AI Assistant to generate infrastructure placement and scheduling recommendations.")
-
-    if st.button("✨ Generate AI Planning Report"):
-        if 'df_processed' not in st.session_state:
-            st.warning("Please train the models first so the agent has data to analyze.")
-        else:
-            with st.spinner("Agent is analyzing data & retrieving guidelines..."):
-                from src.agent import run_agent
-                
-                df_processed = st.session_state['df_processed']
-                stats = get_summary_stats(df_processed)
-                peak_hours = get_peak_hours(df_processed)
-                peak_days = get_peak_days(df_processed)
-                
-                report = run_agent({}, peak_hours, peak_days, stats)
-                st.session_state['agent_report'] = report
-                st.success("Report generated successfully!")
-                
+    # 6. Agentic Infrastructure Planning
+    st.header("🤖 6. AI Infrastructure Planning Assistant (Milestone 2)")
+    st.markdown("Use our LLM-powered agent to reason about demand patterns and generate infrastructure expansion recommendations.")
+    
+    if st.button("🧠 Generate Planning Report (Uses LangGraph + Groq)"):
+        with st.spinner("Agent is analyzing data and retrieving guidelines..."):
+            stats = get_summary_stats(df_processed)
+            peak_hours = get_peak_hours(df_processed)
+            peak_days = get_peak_days(df_processed)
+            
+            # Predict dict logic
+            predictions = {}
+            if 'model' in st.session_state and 'df_processed' in st.session_state:
+                predictions['status'] = 'Forecast available'
+            
+            from src.agent import run_agent
+            report = run_agent(predictions, peak_hours, peak_days, stats)
+            st.session_state['agent_report'] = report
+            
     if 'agent_report' in st.session_state:
         report = st.session_state['agent_report']
+        st.success("✅ Report Generated!")
         
-        if report.get("data_warnings"):
-            st.warning(f"Data Warning: {report['data_warnings']}")
-            
-        st.subheader("📝 AI Demand Summary")
-        st.write(report.get("demand_summary", ""))
+        st.subheader("📝 Charging Demand Summary")
+        st.info(report.get("demand_summary", ""))
         
-        st.subheader("🏭 Infrastructure Recommendations")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("📍 High-Load Analysis")
+            st.write(report.get("high_load_analysis", ""))
+        with col2:
+            st.subheader("🕵️ Review Feedback")
+            st.write(report.get("review_status", ""))
+        
+        st.subheader("🏗️ Infrastructure Expansion Recommendations")
         st.write(report.get("infrastructure_recommendations", ""))
         
-        st.subheader("⏱️ Scheduling Insights")
+        st.subheader("📅 Scheduling & Load-Balancing Insights")
         st.write(report.get("scheduling_insights", ""))
         
-        with st.expander("📚 References & Review Status"):
-            st.write("**References:**", report.get("references", ""))
-            st.write("**AI Review Feedback:**", report.get("review_status", ""))
+        with st.expander("📚 Supporting References (RAG)"):
+            st.write(report.get("references", ""))
+            
+        if report.get("data_warnings"):
+            st.warning(f"Data Warning: {report.get('data_warnings')}")
+            
+        from src.pdf_export import generate_planning_report
+        import tempfile
+        import os
         
-        # PDF EXPORT
-        from src.report import generate_pdf_report
-        try:
-            pdf_bytes = generate_pdf_report(report)
-            st.download_button(
-                label="📄 Download Full Report as PDF",
-                data=pdf_bytes,
-                file_name="ev_planning_report.pdf",
-                mime="application/pdf"
-            )
-        except Exception as e:
-            st.error(f"Could not generate PDF: {str(e)}")
+        pdf_path = os.path.join(tempfile.gettempdir(), "ev_planning_report.pdf")
+        generate_planning_report(report, pdf_path)
+        
+        with open(pdf_path, "rb") as f:
+            pdf_bytes = f.read()
+            
+        st.download_button(
+            label="📥 Download Infrastructure Planning Report (PDF)",
+            data=pdf_bytes,
+            file_name="ev_planning_report.pdf",
+            mime="application/pdf"
+        )
 
 # route to the right data source
 if data_source == "Sample Data":

@@ -66,8 +66,14 @@ peak days: {d_str}
 from src.rag import retrieve_best_guidelines
 
 def retrieve_guidelines(state):
-    q = "ev charging station placement grid integration load management"
-    state["guidelines"] = retrieve_best_guidelines(q)
+    # Dynamic RAG query based on the generated demand summary
+    summary = state.get("demand_summary", "")
+    if summary:
+        q = f"ev charging station placement grid integration load management based on: {summary}"
+    else:
+        q = "ev charging station placement grid integration load management"
+        
+    state["guidelines"] = retrieve_best_guidelines(q, k=3)
     return state
 
 def generate_plan(state):
